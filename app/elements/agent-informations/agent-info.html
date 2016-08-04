@@ -9,12 +9,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/things-global-behavior/things-global-behavior.html">
 
 <dom-module id="agent-info">
   <template>
@@ -63,58 +65,72 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <h2 class="page-title">{{title}}</h2>
+      <h2 class="page-title">Agent Information</h2>
+      <things-ajax id="agentSave" method="PUT" content-type="application/json" resource-url="agent/agent_infos">
+      </things-ajax>
+      <!-- Agent form -->
+      <div role="listbox">
+        <form is="iron-form" id="agentForm" method="post"
+             with-credentials
+             content-type="application/json"
+             action="[[globals.baseUrl]]/agent/agent_infos">
+          <paper-icon-item>
+            <iron-icon icon="hardware:computer" item-icon>
+            </iron-icon>
+            <paper-item-body two-line>
+              <div>Agent Name</div>
+              <div secondary>[[agent.name]]</div>
+            </paper-item-body>
+          </paper-icon-item>
 
-    <div role="listbox">
-      <form is="iron-form" id="form" method="put" action="[[resourceUrl]]">
-        <paper-icon-item>
-          <iron-icon icon="hardware:computer" item-icon>
-          </iron-icon>
-          <paper-item-body two-line>
-            <div>Agent Name</div>
-            <div secondary>[[agent.name]]</div>
-          </paper-item-body>
-        </paper-icon-item>
+          <paper-icon-item>
+            <iron-icon icon="hardware:router" item-icon>
+            </iron-icon>
+            <paper-item-body two-line>
+              <paper-input id="masterIp" name ="manager_server_host"  label="Master Server IP" placeholder="Please input server IP" value={{agent.manager_server_host}}>
+              </paper-input>
+            </paper-item-body>
+          </paper-icon-item>
 
-        <paper-icon-item>
-          <iron-icon icon="hardware:router" item-icon>
-          </iron-icon>
-          <paper-item-body two-line>
-            <paper-input id="masterIp" label="Master Server IP" placeholder="Please input server IP" value={{agent.manager_server_host}}>
-            </paper-input>
-          </paper-item-body>
-        </paper-icon-item>
+          <paper-icon-item>
+            <iron-icon icon="image:panorama-fish-eye" item-icon>
+            </iron-icon>
+            <paper-item-body two-line>
+              <paper-input id="masterPort" name ="manager_server_port" label="Master Server Port" placeholder="Please input server Port" value={{agent.manager_server_port}}>
+              </paper-input>
+            </paper-item-body>
+          </paper-icon-item>
+        </form>
+        <paper-fab id="saveAgentBtn" icon="icons:save" title="save" class="blue" on-tap="_onSaveAgent"></paper-fab>
+      </div>
+      <br>
+      <!-- printer form -->
+      <h2 class="page-title">Printer Information</h2>
+      <div role="listbox">
+        <form is="iron-form" id="printerForm" method="post"
+          with-credentials
+          content-type="application/json"
+          action="[[globals.baseUrl]]/agent/agent_infos">
+          <paper-icon-item>
+            <iron-icon icon="av:subtitles" item-icon>
+            </iron-icon>
+            <paper-item-body two-line>
+              <paper-input name ="char_set" id="charSet" label="Charactor Set" placeholder="Please input Charactor Set" value={{printer.char_set}}>
+              </paper-input>
+            </paper-item-body>
+          </paper-icon-item>
 
-        <paper-icon-item>
-          <iron-icon icon="image:panorama-fish-eye" item-icon>
-          </iron-icon>
-          <paper-item-body two-line>
-            <paper-input id="masterPort" label="Master Server Port" placeholder="Please input server Port" value={{agent.manager_server_port}}>
-            </paper-input>
-          </paper-item-body>
-        </paper-icon-item>
-
-        <paper-icon-item>
-          <iron-icon icon="av:subtitles" item-icon>
-          </iron-icon>
-          <paper-item-body two-line>
-            <paper-input id="charSet" label="Charactor Set" placeholder="Please input Charactor Set" value={{agent.char_set}}>
-            </paper-input>
-          </paper-item-body>
-        </paper-icon-item>
-
-        <paper-icon-item>
-          <iron-icon icon="editor:short-text" item-icon>
-          </iron-icon>
-          <paper-item-body two-line>
-            <div>Printer : [[printer.name]]</div>
-            <paper-textarea id="command" rows="5" label="Command Script" value="{{printer.command::change}}" placeholder="Please Input Command Script"></paper-textarea>
-          </paper-item-body>
-        </paper-icon-item>
-      </form>
-
-      <paper-fab icon="icons:save" title="save" class="blue"></paper-fab>
-    </div>
+          <paper-icon-item>
+            <iron-icon icon="editor:short-text" item-icon>
+            </iron-icon>
+            <paper-item-body two-line>
+              <div>Printer : [[printer.name]]</div>
+              <paper-textarea name="command" id="command" rows="5" label="Command Script" value="{{printer.command}}" placeholder="Please Input Command Script"></paper-textarea>
+            </paper-item-body>
+          </paper-icon-item>
+        </form>
+        <paper-fab id="savePrinterBtn" icon="icons:save" title="save" class="blue" on-tap="_onSavePrinter"></paper-fab>
+      </div>
   </template>
 
   <script>
@@ -142,16 +158,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             notify: true
           }
         },
+        behaviors: [
+          Things.GlobalBehavior
+        ],
         observers: [
           'onPrinterChange(printer.command)'
         ],
         onPrinterChange: function(command) {
-          if (this.printer) {
-            var index = this.agent.printer_infos.find(function(printer) {
-              return printer.name === this.printer.name
-            }.bind(this));
-            this.splice('agent.printer_infos', index, 1, this.printer)
-          }
+          // var printer = this.printer;
+          // if (this.printer) {
+          //   var index = this.agent.printer_infos.findIndex(function(printer) {
+          //     return printer.name === this.printer.name
+          //   }.bind(this));
+          //   this.splice('agent.printer_infos', index, 1, this.printer)
+          // }
+        },
+        _onSavePrinter:function(){
+          this.$.agentSave.body = this.agent;
+          this.$.agentSave.generateRequest();
+        },
+        _onSaveAgent:function(){
+          this.$.agentSave.body = this.agent;
+          this.$.agentSave.generateRequest();
         }
       });
     })();

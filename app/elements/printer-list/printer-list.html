@@ -40,12 +40,17 @@
           <template id="domRepeat" is="dom-repeat" items="[[printers]]" index-as="index">
             <tr>
               <td>[[item.name]]</td>
-              <td>[[item.color_supported]]</td>
-              <td>[[item.printer_is_accepting_jobs]]</td>
-              <td>[[item.queued_job_count]]</td>
+              <td>
+                <paper-input id="charSet" label="Charactor Set"
+                  placeholder="Please input Charactor Set" value$={{item.char_set}}>
+                </paper-input>
+              </td>
               <td>
                 <printer-tester printer-info$="[[item]]"></printer-tester>
               </td>
+              <td>[[item.color_supported]]</td>
+              <td>[[item.printer_is_accepting_jobs]]</td>
+              <td>[[item.queued_job_count]]</td>
             </tr>
           </template>
         </tbody>
