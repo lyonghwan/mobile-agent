@@ -1,0 +1,83 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<dom-module id="printer-list">
+  <template>
+    <style is="custom-style">
+      :host {
+        display: block;
+      }
+
+      #grid {
+        width: 100%;
+        height: 300px;
+      }
+
+      span {
+        @apply(--paper-font-body1);
+      }
+
+    </style>
+    <vaadin-grid id="grid">
+      <table>
+        <colgroup>
+          <col>
+          <col>
+          <col>
+          <col>
+          <col> </colgroup>
+        <thead>
+          <tr>
+            <th>Printer</th>
+            <th>Support Color</th>
+            <th>Status</th>
+            <th>Queued Job Count</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <template id="domRepeat" is="dom-repeat" items="[[printers]]" index-as="index">
+            <tr>
+              <td>[[item.name]]</td>
+              <td>[[item.color_supported]]</td>
+              <td>[[item.printer_is_accepting_jobs]]</td>
+              <td>[[item.queued_job_count]]</td>
+              <td>
+                <printer-tester printer-info$="[[item]]"></printer-tester>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </vaadin-grid>
+  </template>
+  <script>
+    Polymer({
+      is: 'printer-list',
+      properties: {
+        printers: {
+          type: Array,
+          notify: true,
+          observer: 'onPrintersChange'
+        },
+        selected: {
+          type: Array,
+          notify: true
+        }
+      },
+      ready: function() {
+        // select item
+        this.$.grid.addEventListener('selected-items-changed', function() {
+          this.printers = this.printers || [];
+          this.set('selected', this.printers[this.$.grid.selection.selected()]);
+        }.bind(this));
+      },
+      onPrintersChange: function() {
+        console.log(this.printers);
+      }
+
+    });
+
+  </script>
+</dom-module>

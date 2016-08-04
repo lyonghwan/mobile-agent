@@ -36,7 +36,6 @@
   "scripts": {
     "test": "gulp test:local",
     "start": "gulp serve",
-    "run-android":"gulp && cordova run android",
     "lint": "gulp lint"
   },
   "engines": {

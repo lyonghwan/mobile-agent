@@ -1,0 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="../../bower_components/paper-dialog-behavior/paper-dialog-shared-styles.html">
+
+<link rel="import" href="../../bower_components/things-global-behavior/things-global-behavior.html">
+<link rel="import" href="../../bower_components/things-i18n-msg/things-i18n-msg.html">
+<link rel="import" href="../../bower_components/things-resource-combo/things-locale-combo.html">
+
+<dom-module id="agent-setting-dialog">
+  <template>
+    <style include="paper-dialog-shared-styles"></style>
+
+    <h2><things-i18n-msg auto msgid="button.setting">Setting</things-i18n-msg> (Only Client Side Setting)</h2>
+
+    <!-- Base URL -->
+    <paper-input label="Base URL (ex: http://www.elidom.xyz:80/rest)" value="{{globals.baseUrl::change}}" autoValidate required>
+    </paper-input>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'agent-setting-dialog',
+      properties: {},
+
+      behaviors: [
+        Polymer.PaperDialogBehavior,
+        Things.GlobalBehavior
+      ]
+    });
+  </script>
+</dom-module>

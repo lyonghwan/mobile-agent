@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Polymer Starter Kit">
-  <title>Polymer Starter Kit</title>
+  <title>Agent Client</title>
 
   <!-- Place favicon.ico in the `app/` directory -->
 
@@ -69,25 +69,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Drawer Toolbar -->
         <paper-toolbar id="drawerToolbar">
-          <span class="menu-name">Menu</span>
+          <span class="menu-name">Agent</span>
         </paper-toolbar>
 
         <!-- Drawer Content -->
         <paper-menu attr-for-selected="data-route" selected="[[route]]">
           <a data-route="home" href="{{baseUrl}}">
             <iron-icon icon="home"></iron-icon>
-            <span>Home</span>
+            <span>Agent Client</span>
           </a>
 
-          <a data-route="users" href="{{baseUrl}}users">
+          <!-- <a data-route="users" href="{{baseUrl}}users">
             <iron-icon icon="info"></iron-icon>
-            <span>Users</span>
+            <span>Agent Manager</span>
           </a>
 
           <a data-route="contact" href="{{baseUrl}}contact">
             <iron-icon icon="mail"></iron-icon>
             <span>Contact</span>
-          </a>
+          </a> -->
         </paper-menu>
       </paper-scroll-header-panel>
 
@@ -96,21 +96,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar" class="tall">
           <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
-
           <span class="space"></span>
 
           <!-- Toolbar icons -->
+          <agent-setting></agent-setting>
           <paper-icon-button icon="refresh"></paper-icon-button>
-          <paper-icon-button icon="search"></paper-icon-button>
+          <!-- <paper-icon-button icon="search"></paper-icon-button>s
 
           <!-- Application name -->
           <div class="middle middle-container">
-            <div class="app-name">Polymer Starter Kit</div>
+            <div class="app-name">Agent Manager</div>
           </div>
 
           <!-- Application sub title -->
           <div class="bottom bottom-container">
-            <div class="bottom-title">The future of the web today</div>
+            <div class="bottom-title">Agent 관리 서비스 입니다.</div>
           </div>
         </paper-toolbar>
 
@@ -118,59 +118,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
             <section data-route="home">
+              <things-ajax auto id="getAgentsInfos" method="GET" resource-url="agent/agent_infos" last-response="{{agent}}">
+              </things-ajax>
               <paper-material elevation="1">
-                <my-greeting></my-greeting>
-
-                <p class="subhead">You now have:</p>
-                <my-list></my-list>
-
-                <p>Looking for more Web App layouts? Check out our <a href="https://github.com/PolymerElements/app-layout-templates">layouts</a> collection. You can also <a href="http://polymerelements.github.io/app-layout-templates/">preview</a> them live.</p>
-              </paper-material>
-
-              <paper-material elevation="1">
-                <h1 id="license">License</h1>
-                <p>Everything in this repo is BSD style license unless otherwise specified.</p>
-                <p>Copyright (c) 2015 The Polymer Authors. All rights reserved.</p>
-                <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-                <ul>
-                <li>Redistributions of source code must retain the above copyright
-                notice, this list of conditions and the following disclaimer.</li>
-                <li>Redistributions in binary form must reproduce the above
-                copyright notice, this list of conditions and the following disclaimer
-                in the documentation and/or other materials provided with the
-                distribution.</li>
-                <li>Neither the name of Google Inc. nor the names of its
-                contributors may be used to endorse or promote products derived from
-                this software without specific prior written permission.</li>
-                </ul>
-                <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+                <agent-info agent="{{agent}}" printer="{{printer}}"></agent-info>
+                <p class="subhead">You now have printers:</p>
+                <printer-list printers="[[agent.printer_infos]]" selected="{{printer}}"></printer-list>
               </paper-material>
             </section>
 
-            <section data-route="users">
+            <!-- <section data-route="users">
               <paper-material elevation="1">
-                <h2 class="page-title">Users</h2>
-                <p>This is the users section</p>
-                <a href$="{{baseUrl}}users/Addy">Addy</a><br>
-                <a href$="{{baseUrl}}users/Rob">Rob</a><br>
-                <a href$="{{baseUrl}}users/Chuck">Chuck</a><br>
-                <a href$="{{baseUrl}}users/Sam">Sam</a>
+                <h2 class="page-title">Agent 관리화면</h2>
+                <p class="subhead">You now have agents:</p>
+                <agent-list selected={{selected}}></agent-list>
+                <template is="dom-if" if="[[selected]]" restamp="true">
+                  <p class="subhead"><b>[[selected.printer]]</b> now have printers:</p>
+                  <printer-list printers="[[agent.printer_infos]]" selected="{{printer}}"></printer-list>
+                </template>
               </paper-material>
-            </section>
+            </section> -->
 
-            <section data-route="user-info">
-              <paper-material elevation="1">
-                <h2 class="page-title">User: {{params.name}}</h2>
-                <div>This is {{params.name}}'s section</div>
-              </paper-material>
-            </section>
 
-            <section data-route="contact">
+            <!-- <section data-route="contact">
               <paper-material elevation="1">
                 <h2 class="page-title">Contact</h2>
                 <p>This is the contact section</p>
               </paper-material>
-            </section>
+            </section> -->
           </iron-pages>
         </div>
       </paper-scroll-header-panel>
@@ -181,22 +156,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-toast>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
-    <paper-toast id="caching-complete"
-                 duration="6000"
-                 text="Caching complete! This app will work offline.">
+
+    <paper-toast id="caching-complete" duration="6000" text="Caching complete! This app will work offline.">
     </paper-toast>
 
-    <platinum-sw-register auto-register
-                          clients-claim
-                          skip-waiting
-                          base-uri="bower_components/platinum-sw/bootstrap"
-                          on-service-worker-installed="displayInstalledToast">
-      <platinum-sw-cache default-cache-strategy="fastest"
-                         cache-config-file="cache-config.json">
+    <platinum-sw-register auto-register clients-claim skip-waiting base-uri="bower_components/platinum-sw/bootstrap" on-service-worker-installed="displayInstalledToast">
+      <platinum-sw-cache default-cache-strategy="fastest" cache-config-file="cache-config.json">
       </platinum-sw-cache>
     </platinum-sw-register>
-    -->
+
 
   </template>
 

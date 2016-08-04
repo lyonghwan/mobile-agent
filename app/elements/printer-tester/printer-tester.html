@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="printer-tester">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+    </style>
+    <things-ajax id="printTest" method="POST" content-type="application/json" resource-url="agent/agent_infos/print/{{printerInfo.name}}">
+    </things-ajax>
+    <paper-icon-button id="printTestBtn" icon="icons:print" title="print" on-tap="_onRequestPrint">
+    </paper-icon-button>
+  </template>
+  <script>
+    Polymer({
+      is: 'printer-tester',
+      properties: {
+        printerInfo: {
+          type: Object
+        }
+      },
+      _onRequestPrint: function(e) {
+        this.$.printTest.body = this.printerInfo;
+        this.$.printTest.generateRequest();
+      }
+
+    });
+
+  </script>
+</dom-module>
